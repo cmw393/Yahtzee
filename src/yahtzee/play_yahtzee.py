@@ -1,8 +1,8 @@
-from yahtzee.player import Player
-from yahtzee.display_dice import display_dice
-from yahtzee.scoring import Scoring
+from player import Player
+from display_dice import display_dice
+from scoring import Scoring
 
-class PlayYahtzee(Player,Scoring):
+class PlayYahtzee(Player):
     def __init__(self, num_players=1):
         self.num_players = num_players
         self.players = [Player() for _ in range(num_players)]
@@ -16,17 +16,17 @@ class PlayYahtzee(Player,Scoring):
     def roll(self, player):
         """Initiates a dice roll and displays the results."""
         print("\nRolling the dice...")
-        player.roll()
-        display_dice(player.get_state()['dice_values'])
+        player.turn.roll()
+        display_dice(player.turn.get_state()['dice_values'])
 
     def choose_category(self, player):
         """Allows the player to choose a scoring category."""
         print("\nChoosing a scoring category...")
         player.display_score_card()
-        available_categories = Scoring.remaining_categories()
+        available_categories = player.remaining_categories()
 
         for category in available_categories:
-            score = Scoring.calculate_score(category, player.get_state()['dice_values'])
+            score = player.score.calculate_score(category, player.turn.get_state()['dice_values'])
             print(f"{category}: {score}")
 
         category_input = input("Enter the category to score: ")
@@ -34,12 +34,13 @@ class PlayYahtzee(Player,Scoring):
             print("Invalid category. Choose from the remaining categories.")
             category_input = input("Enter the category to score: ")
 
-        score = Scoring.calculate_score(category_input, player.get_state()['dice_values'])
+        score = player.score.calculate_score(category_input, player.turn.get_state()['dice_values'])
         player.score.mark_score(category_input, score)
+
 
     def start_new_turn(self, player):
         """Resets the game state for a new turn."""
-        player.rolls_left = 3
+        player.turn.rolls_left = 3
         player.held_dice = []
 
     def turn(self, player):
@@ -47,14 +48,14 @@ class PlayYahtzee(Player,Scoring):
         for roll_num in range(3):
             print(f"\nRoll {roll_num + 1}")
             self.roll(player)
-            held_indices = player.get_state()['held_dice']
-            display_dice(player.get_state()['dice_values'], held_indices)
+            held_indices = player.turn.get_state()['held_dice']
+            display_dice(player.turn.get_state()['dice_values'], held_indices)
 
             if roll_num < 2:  # Allow holding dice only for the first two rolls
                 hold_input = input("Enter indices of dice to hold (space-separated, or 'none' to hold none): ")
                 if hold_input.lower() != 'none':
                     indices_to_hold = [int(index) for index in hold_input.split()]
-                    player.hold(indices_to_hold)
+                    player.turn.hold(indices_to_hold)
 
             self.choose_category(player)
 
@@ -83,7 +84,7 @@ class PlayYahtzee(Player,Scoring):
         self.generate_block_art()
         print("\nFinal Scores:")
         for player in self.players:
-            print(f"{player.name}: {sum(Scoring.get_score_card().values())}")
+            print(f"{player.name}: {sum(player.score.get_score_card().values())}")
 
 # Run the game
 if __name__ == "__main__":
