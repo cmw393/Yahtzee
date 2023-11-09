@@ -1,7 +1,7 @@
 import random
 from dataclasses import dataclass
 from typing import List
-from dataclasses import dataclass, field, post_init
+from dataclasses import dataclass, field
 @dataclass
 class Dice:
     sides: int = 6
@@ -15,8 +15,8 @@ class Dice:
 class YahtzeeDice(Dice):
     num_dice: int = 5
     dice_set: list[Dice] = field(default_factory=list)
-    @post_init
-    def _initialize_dice_set(self):
+
+    def __post_init__(self):
         """Initialize the dice_set attribute with a list of Dice objects."""
         self.dice_set = [Dice() for _ in range(self.num_dice)]
 

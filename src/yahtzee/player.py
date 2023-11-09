@@ -1,7 +1,7 @@
 from typing import List, Dict
-from scoring import Scoring
-from dice import YahtzeeDice
-from display_dice import display_dice
+from yahtzee.scoring import Scoring
+from yahtzee.dice import YahtzeeDice
+from yahtzee.display_dice import display_dice
 
 class Player(Scoring):
     def __init__(self):
@@ -51,7 +51,4 @@ class Player(Scoring):
                         'rolls_left': self.rolls_left,
                         'held_dice': self.held_dice
                     }
-                
 
-        # Create an instance of the nested PlayerTurn class
-        self.turn = self.PlayerTurn(self)
