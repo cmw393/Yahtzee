@@ -22,7 +22,8 @@ class Scoring:
 
         # Scoring logic for single-number categories (Ones, Twos, etc.)
         if category in ["Ones", "Twos", "Threes", "Fours", "Fives", "Sixes"]:
-            return dice_counts[int(category[-1])] * int(category[-1])
+            catTest = {"Ones" : 1, "Twos" : 2, "Threes" : 3, "Fours" : 4, "Fives" : 5, "Sixes" : 6}
+            return  dice_counts[catTest[category]] * catTest[category] #Maps user input(category) to a int value for counter to check, then multipes by said value
 
         # Scoring logic for Three of a Kind and Four of a Kind
         elif category in ["Three of a Kind", "Four of a Kind"]:
