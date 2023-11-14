@@ -4,12 +4,13 @@ from dice import YahtzeeDice
 from display_dice import display_dice
 
 class Player(Scoring):
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()  # Initialize the Scoring base class
-        self.name = input("Enter your name: ")
+        self.name = name
         self.score = 0
         self.turn = self.PlayerTurn(self)
 
+# Inside the Player class
     class PlayerTurn:
         def __init__(self, player_instance):
             self.yahtzee_dice = YahtzeeDice()  # Assuming you have a YahtzeeDice class
@@ -17,6 +18,7 @@ class Player(Scoring):
             self.held_dice = []
             self.player_instance = player_instance
             self.scoring = Scoring()
+
         def roll(self):
             """
             Rolls all dice not being held, updates their values, and decrements rolls_left.
@@ -52,3 +54,4 @@ class Player(Scoring):
                 'rolls_left': self.rolls_left,
                 'held_dice': self.held_dice
             }
+

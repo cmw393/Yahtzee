@@ -111,5 +111,7 @@ class Scoring:
         Checks if the score card is full.
         """
         return len(self.score_card) == len(self.all_categories)
-    
-    
+    def display_score_card(self):
+        print("Score Card:")
+        for category, score in self.score_card.items():
+            print(f"{category}: {score}")
