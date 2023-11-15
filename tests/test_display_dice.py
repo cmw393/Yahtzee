@@ -1,4 +1,4 @@
-from yahtzee.dice_display import display_dice
+from test_display_dice import display_dice
 import pytest
 from io import StringIO
 import sys
