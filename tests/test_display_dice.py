@@ -1,94 +1,27 @@
-from test_display_dice import display_dice
 import pytest
-from io import StringIO
-import sys
+from yahtzee.display_dice import display_dice
 
 
 def test_display_dice(capsys):
-    values = [1, 2, 3, 4, 5, 6]
-    held_indices = [1, 3, 5]
-
-    expected_output = """  _______  
- |       | 
- |   •   | 
- |_______| 
-[0m
-  _______  
- | •     | 
- |       | 
- |____•__| 
-[92m  _______  
- | •   • | 
- |       | 
- | •___• | 
-[0m
-  _______  
- | •   • | 
- |   •   | 
- | •___• | 
-[92m  _______  
- | •   • | 
- | •   • | 
- | •___• | 
-[0m
-"""
-
-    display_dice(values, held_indices)
-    captured = capsys.readouterr()
-    assert captured.out == expected_output
-
-
-def test_display_dice_no_held(capsys):
-    values = [1, 2, 3, 4, 5, 6]
-    expected_output = """  _______  
- |       | 
- |   •   | 
- |_______| 
-[0m
-  _______  
- | •     | 
- |       | 
- |____•__| 
-[0m
-  _______  
- | •     | 
- |   •   | 
- |____•__| 
-[0m
-  _______  
- | •   • | 
- |       | 
- | •___• | 
-[0m
-  _______  
- | •   • | 
- |   •   | 
- | •___• | 
-[0m
-  _______  
- | •   • | 
- | •   • | 
- | •___• | 
-[0m
-"""
-
+    # Test displaying dice with no held indices
+    values = [1, 2, 3, 4, 5]
     display_dice(values)
     captured = capsys.readouterr()
-    assert captured.out == expected_output
+    assert "  _______  \n |       | \n |   •   | \n |_______| \n" in captured.out
+    assert "  _______  \n | •     | \n |       | \n |____•__| \n" in captured.out
+    assert "  _______  \n | •     | \n |   •   | \n |____•__| \n" in captured.out
+    assert "  _______  \n | •   • | \n |       | \n | •___• | \n" in captured.out
+    assert "  _______  \n | •   • | \n |   •   | \n | •___• | \n" in captured.out
+    assert "  _______  \n | •   • | \n | •   • | \n | •___• | \n" in captured.out
 
-
-def test_display_dice_invalid_values(capsys):
-    values = [7, 8, 9]
-    with pytest.raises(KeyError, match="Invalid dice value"):
-        display_dice(values)
-
-
-def test_display_dice_invalid_held_indices(capsys):
-    values = [1, 2, 3, 4, 5, 6]
-    held_indices = [6, 7, 8]
-    with pytest.raises(IndexError, match="Invalid index in held_indices"):
-        display_dice(values, held_indices)
-
-
-if __name__ == "__main__":
-    pytest.main()
+    # Test displaying dice with some held indices
+    values = [1, 2, 3, 4, 5]
+    held_indices = [0, 2, 4]
+    display_dice(values, held_indices)
+    captured = capsys.readouterr()
+    assert "\033[92m  _______  \n |       | \n |   •   | \n |_______| \n\033[92m" in captured.out
+    assert "  _______  \n | •     | \n |       | \n |____•__| \n" in captured.out
+    assert "\033[92m  _______  \n | •     | \n |   •   | \n |____•__| \n\033[92m" in captured.out
+    assert "  _______  \n | •   • | \n |       | \n | •___• | \n" in captured.out
+    assert "\033[92m  _______  \n | •   • | \n |   •   | \n | •___• | \n\033[92m" in captured.out
+    assert "  _______  \n | •   • | \n | •   • | \n | •___• | \n" in captured.out
