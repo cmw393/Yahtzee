@@ -37,14 +37,13 @@ class Player(Scoring):
                 return rolled_values
             else:
                 print("No more rolls left in this turn.")
-                return []
+                return [] 
 
         def hold(self, indices: List[int]):
             """
             Accepts a list of indices and updates held_dice to hold those dice.
             """
             self.held_dice = indices
-
         def get_state(self):
             """
             Returns a dictionary containing the current state of the turn (dice_values, rolls_left, held_dice).

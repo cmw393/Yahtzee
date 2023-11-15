@@ -31,21 +31,27 @@ class Scoring:
 
         # Scoring logic for Full House
         elif category == "Full House":
-            if set(dice_counts.values()) == {2, 3}:
-                return sum(dice_values)
-            return 0
-
-        # Scoring logic for Small Straight
-        elif category == "Small Straight":
-            if any(dice_counts[i] >= 1 for i in range(1, 5)) and dice_counts[5] >= 1:
+            unique_counts = set(dice_counts.values())
+            if unique_counts == {2, 3}:
                 return 25
             return 0
 
+
+        # Scoring logic for Small Straight
+        elif category == "Small Straight":
+            sorted_values = sorted(dice_values)
+            # Check for a Small Straight
+            if any(sorted_values[i + 1] - sorted_values[i] != 1 for i in range(len(sorted_values) - 1)):
+                return 0  # Not a Small Straight
+            return 25  # Small Straight
+
         # Scoring logic for Large Straight
         elif category == "Large Straight":
-            if any(dice_counts[i] >= 1 for i in range(2, 6)) and dice_counts[1] >= 1:
-                return 30
-            return 0
+            sorted_values = sorted(dice_values)
+            # Check for a Large Straight
+            if all(sorted_values[i + 1] - sorted_values[i] == 1 for i in range(len(sorted_values) - 1)):
+                return 30  # Large Straight
+            return 0  # Not a Large Straight
 
         # Scoring logic for Yahtzee
         elif category == "Yahtzee":
