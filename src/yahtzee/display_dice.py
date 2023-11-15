@@ -14,49 +14,51 @@ def display_dice(values: List[int], held_indices: List[int] = []):
         1: ["  _______  ",
             " |       | ",
             " |   •   | ",
-            " |_______| "],
+            " |       | ",
+            "  -------  "],
 
         2: ["  _______  ",
             " | •     | ",
             " |       | ",
-            " |____•__| "],
+            " |     • | ",
+            "  -------  "],
 
         3: ["  _______  ",
             " | •     | ",
             " |   •   | ",
-            " |____•__| "],
+            " |     • | ",
+            "  -------  "],
 
         4: ["  _______  ",
             " | •   • | ",
             " |       | ",
-            " | •___• | "],
+            " | •   • | ",
+            "  -------  "],
 
         5: ["  _______  ",
             " | •   • | ",
             " |   •   | ",
-            " | •___• | "],
+            " | •   • | ",
+            "  -------  "],
 
         6: ["  _______  ",
             " | •   • | ",
             " | •   • | ",
-            " | •___• | "]
+            " | •   • | ",
+            "  -------  "]
     }
+    lines_per_die_face = 5
 
     # ANSI Color Coding
     color_code_held = "\033[92m"  # Green text for held dice
     color_code_reset = "\033[0m"  # Reset to default color
 
     # Display the ASCII art for each die
-    for i, value in enumerate(values):
-        # Determine if the die is held and set the color accordingly
-        color = color_code_held if i in held_indices else color_code_reset
-
-        # Display the ASCII art for the current die value
-        if value in dice_faces:
-            dice = dice_faces[value]
-            for line in dice:
-                print(f"{color}{line}{color}")
-            print()
-
-
-
+    for l in range(lines_per_die_face):
+        for i, value in enumerate(values):
+            # Determine if the die is held and set the color accordingly
+            color = color_code_held if i in held_indices else color_code_reset
+            if value in dice_faces:
+                dice = dice_faces[value]
+                print(f"{color}{dice[l]}{color_code_reset}", end='')
+        print()

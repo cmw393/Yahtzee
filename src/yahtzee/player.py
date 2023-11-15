@@ -25,10 +25,10 @@ class Player(Scoring):
             """
             if self.rolls_left > 0:
                 # Determine indices of dice not being held
-                self.dice_to_roll = [i for i in range(self.yahtzee_dice.num_dice) if i not in self.held_dice]
+                self.dice_to_roll = [i in self.held_dice for i in range(self.yahtzee_dice.num_dice)]
 
                 # Roll the remaining dice
-                rolled_values = self.yahtzee_dice.roll(keep=[False] * self.yahtzee_dice.num_dice)
+                rolled_values = self.yahtzee_dice.roll(keep=self.dice_to_roll)
 
                 # Update held_dice and rolls_left
                 self.held_dice = []
@@ -53,4 +53,3 @@ class Player(Scoring):
                 'rolls_left': self.rolls_left,
                 'held_dice': self.held_dice
             }
-
