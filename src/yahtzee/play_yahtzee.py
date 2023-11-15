@@ -1,28 +1,40 @@
 from player import Player
 from display_dice import display_dice
+from dice import YahtzeeDice
 
 class PlayYahtzee:
     def __init__(self, num_players=1):
         self.players = [Player(name=input(f"Enter name for player {i + 1}: ")) for i in range(num_players)]
 
     def display_score_card(self, player):
-        print("\nScore Card for", player.name)
-        score_card = player.turn.scoring.get_score_card()
-        for category, score in score_card.items():
-            print(f"{category}: {score}")
+        print("Score Card:")
+        for player in self.players:
+            print(f"\n{player.name}'s Score Card:")
+            score_card = player.turn.scoring.get_score_card()
+            for category in self.players[0].turn.scoring.all_categories:  # Assuming all players have the same categories
+                score = score_card.get(category, "Not scored")
+                print(f"{category}: {score}")
 
     def start_new_turn(self, player):
         print(f"\nStarting a new turn for {player.name}")
-        player.turn = player.PlayerTurn(player)
-        
 
+        # Create a new instance of Dice for each turn
+        new_dice_instance = YahtzeeDice()
+
+        # Update the PlayerTurn instance with the new Dice instance
+        player.turn.yahtzee_dice = new_dice_instance
+
+        # Ensure that the existing scoring instance is used
+        player.turn.scoring = player.turn.scoring
+        player.turn.rolls_left = 3
+        
     def roll(self, player):
         print("\nRolling dice for", player.name)
 
         # If it's the first roll or after choosing categories, roll all dice
         if not player.turn.dice_to_roll:
             display_dice(player.turn.get_state()['dice_values'])
-            print("Score card:", player.turn.scoring.get_score_card())
+            self.display_score_card(player)  # Display the score card using the method
             rolled_values = player.turn.roll()
         else:
             # Subsequent rolls after holding dice
@@ -41,10 +53,16 @@ class PlayYahtzee:
             print("Invalid category. Please choose a valid category.")
             self.choose_category(player)
         else:
-            self.display_score_card(player)  # Display the scorecard
             score = player.turn.scoring.calculate_score(category, player.turn.get_state()['dice_values'])
-            player.turn.scoring.mark_score(category, score)
-            print(f"{player.name} scored {score} points in {category}!")
+
+            try:
+                player.turn.scoring.mark_score(category, score)
+                print(f"{player.name} scored {score} points in {category}!")
+
+                # Display the updated scorecard
+                self.display_score_card(player)
+            except ValueError as e:
+                print(f"Error: {e}")
 
     def turn(self, player):
         print(f"\nTaking a turn for {player.name}")

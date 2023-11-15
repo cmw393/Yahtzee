@@ -6,10 +6,6 @@ class Scoring:
         self.all_categories = set(["Ones", "Twos", "Threes", "Fours", "Fives", "Sixes",
                                    "Three of a Kind", "Four of a Kind", "Full House",
                                    "Small Straight", "Large Straight", "Yahtzee", "Chance"])
-    def display_score_card(self):
-        print("Score Card:")
-        for category, score in self.score_card.items():
-            print(f"{category}: {score}")
     def calculate_score(self, category: str, dice_values: list) -> int:
         """
         Calculate the score for a given category and dice values.
@@ -94,11 +90,13 @@ class Scoring:
         """
         return list(self.all_categories - set(self.score_card.keys()))
     
-    def num_remaining_categories(self) -> int:
+    def remaining_categories(self) -> list:
         """
-        Returns the number of remaining categories.
+        Returns a list of remaining categories.
         """
-        return len(self.all_categories - set(self.score_card.keys()))
+        used_categories = set(self.score_card.keys())
+        return list(set(self.all_categories) - used_categories)
+
     
     def num_used_categories(self) -> int:
         """

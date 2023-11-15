@@ -41,7 +41,8 @@ def test_is_category_used():
 def test_remaining_categories():
     scoring = Scoring()
     scoring.mark_score("Ones", 3)
-    assert scoring.remaining_categories() == ['Twos', 'Threes', 'Fours', 'Fives', 'Sixes', 'Three of a Kind', 'Four of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance']
+    assert sorted(scoring.remaining_categories()) == sorted(['Twos', 'Threes', 'Fours', 'Fives', 'Sixes', 'Three of a Kind', 'Four of a Kind', 'Full House', 'Small Straight', 'Large Straight', 'Yahtzee', 'Chance'])
+
 
 def test_num_remaining_categories():
     scoring = Scoring()
