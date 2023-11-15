@@ -14,18 +14,21 @@ class PlayYahtzee:
     def start_new_turn(self, player):
         print(f"\nStarting a new turn for {player.name}")
         player.turn = player.PlayerTurn(player)
-        print("Turn created successfully")
+        
 
     def roll(self, player):
-        print("\nStarting a new turn for", player.name)
-        player.turn = player.PlayerTurn(player)
-        print("Turn created successfully")
+        print("\nRolling dice for", player.name)
 
-        # Call display_dice to show the dice art
-        display_dice(player.turn.get_state()['dice_values'])
+        # If it's the first roll or after choosing categories, roll all dice
+        if not player.turn.dice_to_roll:
+            display_dice(player.turn.get_state()['dice_values'])
+            print("Score card:", player.turn.scoring.get_score_card())
+            rolled_values = player.turn.roll()
+        else:
+            # Subsequent rolls after holding dice
+            display_dice(player.turn.get_state()['dice_values'], player.turn.dice_to_roll)
+            rolled_values = player.turn.roll()
 
-        print("Score card:", player.turn.scoring.get_score_card())
-        rolled_values = player.turn.roll()
         self.display_rolled_dice(player, rolled_values)
 
     def choose_category(self, player):
@@ -76,7 +79,10 @@ class PlayYahtzee:
         if indices:
             indices = [int(idx) - 1 for idx in indices.split()]
             player.turn.hold(indices)
-
+        else:
+            # If the player didn't input indices, set dice_to_roll to an empty list
+            player.turn.dice_to_roll = []
+            
     def display_rolled_dice(self, player, rolled_values):
         print(f"{player.name}'s Rolled Dice:")
         display_dice(rolled_values)

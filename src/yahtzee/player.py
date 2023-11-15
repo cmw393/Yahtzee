@@ -18,14 +18,14 @@ class Player(Scoring):
             self.held_dice = []
             self.player_instance = player_instance
             self.scoring = Scoring()
-
+            self.dice_to_roll = []
         def roll(self):
             """
             Rolls all dice not being held, updates their values, and decrements rolls_left.
             """
             if self.rolls_left > 0:
                 # Determine indices of dice not being held
-                dice_to_roll = [i for i in range(self.yahtzee_dice.num_dice) if i not in self.held_dice]
+                self.dice_to_roll = [i for i in range(self.yahtzee_dice.num_dice) if i not in self.held_dice]
 
                 # Roll the remaining dice
                 rolled_values = self.yahtzee_dice.roll(keep=[False] * self.yahtzee_dice.num_dice)
